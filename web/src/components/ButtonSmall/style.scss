@@ -1,0 +1,13 @@
+@use '../../styles/var.scss';
+
+#ButtonSmall {
+  height: 48px;
+  border-radius: 8px;
+  padding: 1rem;
+  font-weight: 500;
+  color: var.$white;
+  background-color: var.$green700;
+  &:hover {
+  background-color: var.$green500;
+  }
+}

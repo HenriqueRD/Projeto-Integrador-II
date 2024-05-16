@@ -1,0 +1,49 @@
+@use '../../styles/var.scss';
+
+#Resident {
+  margin-top: 3rem;
+  padding: 1rem;
+  .content {
+    padding: 2rem;
+    border-radius: 8px;
+    background-color: var.$gray600;  
+    border: 2px solid var.$gray500;
+  }
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid var.$gray300;
+    padding-bottom: .5rem;
+    > div {
+      display: flex;
+      flex-direction: column;
+      gap: .4rem
+    }
+    form {
+      display: flex;
+      gap: 1rem;
+      input {
+        border-radius: 8px;
+        height: 48px;
+        background-color: var.$gray500;
+        color: var.$text-primary;
+        outline: 0;
+        padding: 1rem;
+        border: 1px solid var.$gray300;
+        &:hover {
+          border-color: var.$green700;
+        }
+        &:focus {
+          border-color: var.$green700;
+        }
+      }
+    }
+  }
+  .list {
+    margin-top: 2rem;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}

@@ -1,0 +1,11 @@
+@use '../../styles/var.scss';
+
+#Logo {
+  h1 {
+    color: var.$title;
+    font-size: 2rem;
+    span {
+      color: var.$green700;
+    }
+  }
+}

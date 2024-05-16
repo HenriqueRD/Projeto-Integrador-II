@@ -1,0 +1,109 @@
+@use 'var.scss';
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html, body {
+  height: 100vh;
+  width: 100%;
+}
+body {
+  background: var.$bg;
+  color: var.$text-primary;
+}
+body,
+input,
+button,
+textarea, a, select, label  {
+  font: 400 1rem "Inter";
+  transition: 200ms;
+}
+a {
+  text-decoration: none;
+}
+input, select {
+  outline: 0;
+  border: none;
+}
+button {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+.container {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
+::placeholder {
+  color: var.$gray200; /* Define a cor do placeholder */
+}
+h1, h2, h3 {
+  color: var.$title;
+}
+.rbc-btn-group button {
+  background-color: transparent !important;
+  color: var.$title !important;
+  border: 0 !important;
+  font-weight: 400 !important;
+}
+.rbc-btn-group button:hover {
+  background-color: transparent !important;
+  color: var.$green500 !important;
+}
+.rbc-btn-group .rbc-active {
+  background-color: transparent !important;
+  color: var.$green500 !important;
+  font-weight: 700 !important;
+}
+.rbc-month-view {
+  border: 2px solid var.$gray500 !important;
+  padding: .5rem;
+  border-radius: 8px; 
+}
+.rbc-header {
+  color: var.$title !important;
+}
+.rbc-row {
+  color: var.$text-primary !important;
+}
+.rbc-month-row {
+  border-color: var.$gray200 !important;
+}
+.rbc-day-bg {
+  color: var.$title !important;
+  border-color: var.$gray200 !important;
+}
+.rbc-off-range-bg {
+  background-color: var.$gray300 !important;
+  color: var.$text-secondary !important;
+}
+.rbc-day-bg.rbc-today {
+  background-color: var.$bg!important;
+}
+.rbc-row-content .rbc-current button{
+  color: var.$title !important;
+  font-weight: 700 !important;
+}
+.rbc-row-segment {
+  background-color: transparent !important;
+}
+.rbc-row-segment .rbc-event-content {
+  transition: 200ms !important;
+  padding: .1rem;
+
+  background-color: var.$red700 !important;
+}
+.rbc-row-segment .rbc-event-content:hover {
+  background-color: var.$red500 !important;
+}
+.rbc-event {
+  font-weight: 500 !important;
+  transition: 200ms !important;
+  background-color: var.$red700 !important;
+}
+.rbc-event:hover {
+  background-color: var.$red500 !important;
+}

@@ -1,0 +1,84 @@
+@use '../../styles/var.scss';
+
+#CardTopic {
+  width: 100%;
+  border-radius: 8px;
+  padding: 1.5rem;
+  background-color: var.$gray500;
+  border: 2px solid var.$gray300;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .user {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      svg {
+        width: 48px;
+        height: 48px;
+        padding: .5rem;
+        border: 2px solid var.$green700;
+        background-color: var.$gray600;
+        border-radius: 8px;
+      }
+    }
+    > time {
+      font-size: .8rem;
+      color: var.$text-secondary;
+    }
+  }
+  .info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    .name {
+      font-weight: 500;
+      color: var.$title;
+    }
+    .cat {
+      border: 2px solid var.$green700;
+      font-weight: 500;
+      color: var.$title;
+      padding: .3rem;
+      text-transform: uppercase;
+      font-size: .7rem;
+      border-radius: 5px;
+    }
+  }
+  .text {
+    display: flex;
+    flex-direction: column;
+    gap: .4rem
+  }
+  .text .title {
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: var.$title;
+  }
+  .text p {
+    max-width: 490px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    text-align: justify;
+    line-height: 1.4rem;
+  }
+  .button {
+    margin-top: .5rem;
+      a {
+        height: 48px;
+        border-radius: 8px;
+        padding: 1rem;
+        font-weight: 500;
+        color: var.$white;
+        background-color: var.$green700;
+        &:hover {
+        background-color: var.$green500;
+      }
+    }   
+  }
+}
