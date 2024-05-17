@@ -28,7 +28,7 @@ public class UserEntity {
 	@Email(message = "O campo [email] deve conter um Email valido!")
 	private String email;
 	@NotBlank
-	@Length(min = 4, max = 12)
+	@Length(min = 4)
 	private String password;
 	@CreationTimestamp
 	private LocalDateTime createdAt;

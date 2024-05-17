@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dordox.dordox.Dto.LoginUserDto;
 import com.dordox.dordox.Entities.UserEntity;
 import com.dordox.dordox.Services.UserService;
 
@@ -33,13 +34,23 @@ public class UserController {
 		return new ResponseEntity<>(serv.listByName(name), HttpStatus.OK);
 	}
 	
-	@PostMapping("/")
+	@PostMapping("/create")
 	public ResponseEntity<Object> create(@Validated @RequestBody UserEntity obj) throws Exception {
 		try {
 			UserEntity user = serv.create(obj);
 			return new ResponseEntity<>(user, HttpStatus.CREATED);
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
+		}			
+	}
+	
+	@PostMapping("/auth")
+	public ResponseEntity<Object> auth(@Validated @RequestBody LoginUserDto obj) throws Exception {
+		try {
+			String token = serv.auth(obj);
+			return new ResponseEntity<>(token, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
 		}		
 		
 	}
