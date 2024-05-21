@@ -13,9 +13,9 @@ public class ConfigSecurity {
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.csrf(csrs -> csrs.disable()).authorizeHttpRequests(auth -> {
-			auth.requestMatchers("/users/create").permitAll().requestMatchers("/users/auth").permitAll();
+			auth.requestMatchers("/users/create").permitAll().requestMatchers("/users/auth").permitAll().requestMatchers("/schedules/create").permitAll().requestMatchers("/h2-console/**").permitAll();
 			auth.anyRequest().authenticated();
-		});
+		}).headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()));;
 		return http.build();
 	}
 
