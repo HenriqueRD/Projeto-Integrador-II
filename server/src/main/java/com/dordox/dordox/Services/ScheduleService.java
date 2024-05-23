@@ -1,14 +1,14 @@
 package com.dordox.dordox.Services;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.dordox.dordox.Dto.ScheduleDto;
 import com.dordox.dordox.Entities.ScheduleEntity;
-import com.dordox.dordox.Exceptions.UserNotFoundException;
 import com.dordox.dordox.Repositories.ScheduleRepository;
-import com.dordox.dordox.Repositories.UserRepository;
 
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,8 +17,6 @@ public class ScheduleService {
 	
 	@Autowired
 	private ScheduleRepository repo;
-	@Autowired
-	private UserRepository repoUser;
 	
 	public List<ScheduleEntity> listAll() {
 		List<ScheduleEntity> schedules = repo.findAll();
@@ -26,13 +24,10 @@ public class ScheduleService {
 	}
 	
 	@Transactional
-	public ScheduleEntity create(ScheduleEntity obj) throws UserNotFoundException {
-		if (repoUser.existsById(obj.getUserId())) {
-			ScheduleEntity schedule = repo.save(obj);
-			return schedule;
-		}
-		else {
-			throw new UserNotFoundException("Usuário não existe!");
-		}
+	public ScheduleEntity create(ScheduleDto obj, UUID id) {
+		ScheduleEntity cache = new ScheduleEntity(obj);
+		cache.setUserId(id);
+		ScheduleEntity schedule = repo.save(cache);
+		return schedule;
 	}
 }

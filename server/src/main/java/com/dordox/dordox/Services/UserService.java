@@ -1,5 +1,7 @@
 package com.dordox.dordox.Services;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +55,7 @@ public class UserService {
 		});
 		if(passwordEncoder.matches(obj.getPassword(), user.getPassword())) {
 			Algorithm alg = Algorithm.HMAC256("12345");
-			String token = JWT.create().withIssuer("Dordox").withSubject(user.getId().toString()).sign(alg);
+			String token = JWT.create().withIssuer("Dordox").withExpiresAt(Instant.now().plus(Duration.ofHours(1))).withSubject(user.getId().toString()).sign(alg);
 			return token;
 		}
 		else {

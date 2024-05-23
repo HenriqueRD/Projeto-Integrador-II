@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.dordox.dordox.Dto.ScheduleDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
@@ -37,6 +38,15 @@ public class ScheduleEntity {
     @CreationTimestamp
 	private LocalDateTime createdAt;
 	
+    public ScheduleEntity() {
+	}
+    public ScheduleEntity(ScheduleDto dto) {
+		super();
+		this.title = dto.getTitle();
+		this.description = dto.getDescription();
+		this.date = dto.getDate();
+		this.hours = dto.getHours();
+	}
 	public ScheduleEntity(UUID id, String title, String description, LocalDate date, String hours, UserEntity user,
 			UUID userId, LocalDateTime createdAt) {
 		super();
