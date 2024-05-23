@@ -1,13 +1,13 @@
 package com.dordox.dordox.Services;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dordox.dordox.Dto.ScheduleDto;
 import com.dordox.dordox.Entities.ScheduleEntity;
+import com.dordox.dordox.Entities.UserEntity;
 import com.dordox.dordox.Repositories.ScheduleRepository;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -24,9 +24,10 @@ public class ScheduleService {
 	}
 	
 	@Transactional
-	public ScheduleEntity create(ScheduleDto obj, UUID id) {
+	public ScheduleEntity create(ScheduleDto obj, Long id) {		
 		ScheduleEntity cache = new ScheduleEntity(obj);
-		cache.setUserId(id);
+		cache.setUser(new UserEntity());
+		cache.getUser().setId(id);
 		ScheduleEntity schedule = repo.save(cache);
 		return schedule;
 	}

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dordox.dordox.Dto.LoginUserDto;
+import com.dordox.dordox.Dto.UserDto;
 import com.dordox.dordox.Entities.UserEntity;
 import com.dordox.dordox.Services.UserService;
 
@@ -25,8 +26,9 @@ public class UserController {
 	private UserService serv;
 	
 	@GetMapping("/")
-	public ResponseEntity<List<UserEntity>> listAll() {
-		return new ResponseEntity<>(serv.listAll(), HttpStatus.OK);
+	public ResponseEntity<List<UserDto>> listAll() {
+		List<UserDto> list = serv.listAll().stream().map(x -> new UserDto(x)).toList();
+		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 	
 	@GetMapping("/find")
