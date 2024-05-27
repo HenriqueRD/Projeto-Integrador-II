@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.dordox.dordox.Dto.TopicInputDto;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,21 +30,26 @@ public class TopicEntity {
 	@ManyToOne
     @JoinColumn(name = "user_id")
 	private UserEntity user;
-	@OneToMany(mappedBy = "topic", cascade = CascadeType.ALL)
-	private List<CommentEntity> commnets;
+	@OneToMany(mappedBy = "topic", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<CommentEntity> comments;
 	@CreationTimestamp
 	private LocalDateTime createdAt;
 	
 	public TopicEntity() {
 	}
+	public TopicEntity(TopicInputDto obj) {
+		this.title = obj.getTitle();
+		this.description = obj.getDescription();
+		this.category = obj.getCategory();
+	}
 	public TopicEntity(Long id, String title, String description, String category, UserEntity user,
-			List<CommentEntity> commnets, LocalDateTime createdAt) {
+			List<CommentEntity> comments, LocalDateTime createdAt) {
 		this.id = id;
 		this.title = title;
 		this.description = description;
 		this.category = category;
 		this.user = user;
-		this.commnets = commnets;
+		this.comments = comments;
 		this.createdAt = createdAt;
 	}
 	public Long getId() {
@@ -75,11 +82,11 @@ public class TopicEntity {
 	public void setUser(UserEntity user) {
 		this.user = user;
 	}
-	public List<CommentEntity> getCommnets() {
-		return commnets;
+	public List<CommentEntity> getComments() {
+		return comments;
 	}
-	public void setCommnets(List<CommentEntity> commnets) {
-		this.commnets = commnets;
+	public void setComments(List<CommentEntity> comments) {
+		this.comments = comments;
 	}
 	public LocalDateTime getCreatedAt() {
 		return createdAt;

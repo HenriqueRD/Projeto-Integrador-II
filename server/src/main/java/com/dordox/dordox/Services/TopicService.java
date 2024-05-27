@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.dordox.dordox.Dto.TopicInputDto;
 import com.dordox.dordox.Entities.TopicEntity;
 import com.dordox.dordox.Entities.UserEntity;
 import com.dordox.dordox.Exceptions.TopicNotFoundException;
@@ -30,11 +31,12 @@ public class TopicService {
 	}
 	
 	@Transactional
-	public TopicEntity create(TopicEntity obj, Long id) throws UserNotFoundException {
+	public TopicEntity create(TopicInputDto obj, Long id) throws UserNotFoundException {
 		try {
-			obj.setUser(new UserEntity());
-			obj.getUser().setId(id);
-			TopicEntity schedule = repo.save(obj);
+			TopicEntity topic = new TopicEntity(obj);
+			topic.setUser(new UserEntity());
+			topic.getUser().setId(id);
+			TopicEntity schedule = repo.save(topic);
 			return schedule;
 		} catch (Exception e) {
 			throw new UserNotFoundException("Erro ao criar tópico!");

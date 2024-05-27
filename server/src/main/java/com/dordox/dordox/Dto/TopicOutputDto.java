@@ -3,32 +3,29 @@ package com.dordox.dordox.Dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.dordox.dordox.Entities.CommentEntity;
 import com.dordox.dordox.Entities.TopicEntity;
 
-public class TopicDto {
+public class TopicOutputDto {
 	private Long id;
 	private String title;
 	private String description;
 	private String category;
 	private UserDto user;
-	private List<CommentEntity> comments;
+	private List<CommentOutputDto> comments;
 	private LocalDateTime createdAt;
-	public TopicDto() {
+	public TopicOutputDto() {
 	}
-	public TopicDto(TopicEntity obj) {
-		super();
+	public TopicOutputDto(TopicEntity obj) {
 		this.id = obj.getId();
 		this.title = obj.getTitle();
 		this.description = obj.getDescription();
 		this.category = obj.getCategory();
 		this.user = new UserDto(obj.getUser());
-		this.comments = obj.getCommnets();
+		this.comments = obj.getComments() != null ? obj.getComments().stream().map(x -> new CommentOutputDto(x)).toList() : null;
 		this.createdAt = obj.getCreatedAt();
 	}
-	public TopicDto(Long id, String title, String description, String category, UserDto user,
-			List<CommentEntity> comments, LocalDateTime createdAt) {
-		super();
+	public TopicOutputDto(Long id, String title, String description, String category, UserDto user,
+			List<CommentOutputDto> comments, LocalDateTime createdAt) {
 		this.id = id;
 		this.title = title;
 		this.description = description;
@@ -67,10 +64,10 @@ public class TopicDto {
 	public void setUser(UserDto user) {
 		this.user = user;
 	}
-	public List<CommentEntity> getComments() {
+	public List<CommentOutputDto> getComments() {
 		return comments;
 	}
-	public void setComments(List<CommentEntity> comments) {
+	public void setComments(List<CommentOutputDto> comments) {
 		this.comments = comments;
 	}
 	public LocalDateTime getCreatedAt() {

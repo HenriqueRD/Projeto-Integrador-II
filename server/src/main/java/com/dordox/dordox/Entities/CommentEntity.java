@@ -1,10 +1,10 @@
 package com.dordox.dordox.Entities;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.dordox.dordox.Dto.CommentInputDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,14 +24,17 @@ public class CommentEntity {
     @JoinColumn(name = "user_id")
 	private UserEntity user;
 	@ManyToOne
-	@JoinColumn(name = "topic_id")
-	private TopicEntity topic;
+    @JoinColumn(name = "topic_id")
+    private TopicEntity topic;
 	@CreationTimestamp
 	private LocalDateTime createdAt;
 
-	public CommentEntity(Long id, String description, UserEntity user, TopicEntity topic,
-			UUID topicId, LocalDateTime createdAt) {
-		super();
+	public CommentEntity() {
+	}
+	public CommentEntity(CommentInputDto obj) {
+		this.description = obj.getDescription();
+	}
+	public CommentEntity(Long id, String description, UserEntity user, TopicEntity topic, LocalDateTime createdAt) {
 		this.id = id;
 		this.description = description;
 		this.user = user;

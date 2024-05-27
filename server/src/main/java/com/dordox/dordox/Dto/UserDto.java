@@ -5,25 +5,31 @@ import java.time.LocalDateTime;
 import com.dordox.dordox.Entities.UserEntity;
 
 public class UserDto {
+	private Long id;
 	private String name;
 	private String phone;
 	private String email;
 	private LocalDateTime createdAt;
 	
 	public UserDto(UserEntity obj) {
-		super();
+		this.id = obj.getId();
 		this.name = obj.getName();
 		this.phone = obj.getPhone();
 		this.email = obj.getEmail();
 		this.createdAt = obj.getCreatedAt();
 	}
-	
-	public UserDto(String name, String phone, String email, LocalDateTime createdAt) {
-		super();
+	public UserDto(Long id, String name, String phone, String email, LocalDateTime createdAt) {
+		this.id = id;
 		this.name = name;
 		this.phone = phone;
 		this.email = email;
 		this.createdAt = createdAt;
+	}
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
 	}
 	public String getName() {
 		return name;
