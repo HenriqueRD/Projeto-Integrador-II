@@ -62,4 +62,9 @@ public class UserService {
 			throw new InvalidCredentialsException("Email ou Senha incorreta!");
 		}
 	}
+
+	public UserEntity me(Long id) throws UserNotFoundException {
+		UserEntity user = repo.findById(id).orElseThrow(() -> new UserNotFoundException("Token expirado!"));
+		return user;
+	}
 }

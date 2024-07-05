@@ -1,0 +1,67 @@
+@use '../../styles/var.scss';
+
+#Header {
+  background-color: var.$gray600;
+  border-bottom: 2px solid var.$green700;
+  padding: 1rem;
+  .content {
+      display: flex;
+      align-items: center;
+      gap: 5rem;
+      justify-content: space-between;
+      .isAuth {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .user {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          > svg {
+            width: 46px;
+            height: 46px;
+            padding: .5rem;
+            border: 2px solid var.$green500;
+            background-color: var.$gray600;
+            border-radius: 99px;
+          }
+          .info {
+            display: flex;
+            flex-direction: column;
+            align-items: start;
+            gap: .2rem;
+            strong {
+              color: var.$title;
+            }
+            button {
+              display: flex;
+              gap: .3rem;
+              align-items: center;
+              font-size: .9rem;
+              color: var.$text-secondary;
+              &:hover {
+                color: var.$red500;
+              }
+            }
+          }
+        }
+      }
+  }
+  
+  .nav {
+    display: flex;
+    gap: 1.5rem;
+    a {
+      padding-bottom: 2px;
+      color: var.$text-primary;
+      font-weight: 600;
+      border-radius: 2px;
+      border-bottom: 2px solid var.$gray600;
+      &:hover {
+        border-bottom: 2px solid var.$green500;
+        color: var.$title;
+      }
+    }
+  }
+}

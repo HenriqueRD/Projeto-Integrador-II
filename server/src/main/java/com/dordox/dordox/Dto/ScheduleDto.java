@@ -1,16 +1,17 @@
 package com.dordox.dordox.Dto;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.dordox.dordox.Entities.ScheduleEntity;
+
 
 public class ScheduleDto {
 	
 	private Long id;
 	private String title;
 	private String description;
-	private LocalDate date;
-	private String hours;
+	private LocalDateTime start;
+	private LocalDateTime end;
 	private UserDto user;
 	
 	public ScheduleDto() {
@@ -19,16 +20,16 @@ public class ScheduleDto {
 		this.id = obj.getId();
 		this.title = obj.getTitle();
 		this.description = obj.getDescription();
-		this.date = obj.getDate();
-		this.hours = obj.getHours();
+		this.start = obj.getStart();
+		this.end = obj.getEnd();
 		this.user = new UserDto(obj.getUser());
 	}
-	public ScheduleDto(Long id, String title, String description, LocalDate date, String hours, UserDto user) {
+	public ScheduleDto(Long id, String title, String description, LocalDateTime start, LocalDateTime end, UserDto user) {
 		this.id = id;
 		this.title = title;
 		this.description = description;
-		this.date = date;
-		this.hours = hours;
+		this.start = start;
+		this.end = end;
 		this.user = user;
 	}
 	public Long getId() {
@@ -49,17 +50,17 @@ public class ScheduleDto {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public LocalDate getDate() {
-		return date;
+	public LocalDateTime getStart() {
+		return start;
 	}
-	public void setDate(LocalDate date) {
-		this.date = date;
+	public void setStart(LocalDateTime start) {
+		this.start = start;
 	}
-	public String getHours() {
-		return hours;
+	public LocalDateTime getEnd() {
+		return end;
 	}
-	public void setHours(String hours) {
-		this.hours = hours;
+	public void setEnd(LocalDateTime end) {
+		this.end = end;
 	}
 	public UserDto getUser() {
 		return user;

@@ -4,6 +4,8 @@ import Header from '../../components/Header'
 import { ArrowLeft } from '@phosphor-icons/react'
 import { Link, useNavigate } from 'react-router-dom'
 import Button from '../../components/Button'
+import axios from 'axios'
+import toast from 'react-hot-toast'
 
 export default function Register() {
   const [ name, setName ] = useState('') 
@@ -14,7 +16,33 @@ export default function Register() {
 
   function handleRegister(e : FormEvent) {
     e.preventDefault()
-    navigate('/')
+    axios.post("http://localhost:8080/users/create", {
+      name,
+      phone,
+      email,
+      password
+    }).then(x => {
+      toast.success("Conta criada com sucesso!",
+        {
+          style: {
+            borderRadius: '8px',
+            background: '#323238',
+            color: '#fff',
+          },
+        }
+      )
+      navigate('/login')
+    }).catch(x => {
+      toast.error(x.response.data, {
+        style: {
+          borderRadius: '8px',
+          background: '#323238',
+          color: '#fff',
+        },
+      })
+      navigate('/registrar')
+    })
+    
   }
 
   return (
@@ -45,7 +73,7 @@ export default function Register() {
             <div className='box'>
               <Button text='Cadastrar' />
             </div>
-            <Link to='/' className='box-2'>
+            <Link to='/login' className='box-2'>
               <ArrowLeft size={28} weight='bold' />
               <span>Voltar para login</span>
             </Link>

@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import com.dordox.dordox.Dto.ScheduleDto;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,8 +25,9 @@ public class ScheduleEntity {
 	private Long id;
 	private String title;
 	private String description;
-	private LocalDate date;
-	private String hours;
+	private LocalDateTime start;
+	@Column(name = "finish")
+	private LocalDateTime end;
 	@ManyToOne
     @JoinColumn(name = "user_id")
 	private UserEntity user;
@@ -38,16 +40,16 @@ public class ScheduleEntity {
 		super();
 		this.title = dto.getTitle();
 		this.description = dto.getDescription();
-		this.date = dto.getDate();
-		this.hours = dto.getHours();
+		this.start = dto.getStart();
+		this.end = dto.getEnd();
 	}
-	public ScheduleEntity(Long id, String title, String description, LocalDate date, String hours, UserEntity user, LocalDateTime createdAt) {
+	public ScheduleEntity(Long id, String title, String description, LocalDateTime start, LocalDateTime end, UserEntity user, LocalDateTime createdAt) {
 		super();
 		this.id = id;
 		this.title = title;
 		this.description = description;
-		this.date = date;
-		this.hours = hours;
+		this.start = start;
+		this.end = end;
 		this.user = user;
 		this.createdAt = createdAt;
 	}
@@ -69,17 +71,17 @@ public class ScheduleEntity {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public LocalDate getDate() {
-		return date;
+	public LocalDateTime getStart() {
+		return start;
 	}
-	public void setDate(LocalDate date) {
-		this.date = date;
+	public void setStart(LocalDateTime start) {
+		this.start = start;
 	}
-	public String getHours() {
-		return hours;
+	public LocalDateTime getEnd() {
+		return end;
 	}
-	public void setHours(String hours) {
-		this.hours = hours;
+	public void setEnd(LocalDateTime end) {
+		this.end = end;
 	}
 	public UserEntity getUser() {
 		return user;

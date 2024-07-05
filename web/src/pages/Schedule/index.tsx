@@ -6,32 +6,58 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { ptBR } from 'date-fns/locale'
 import ButtonSmall from '../../components/ButtonSmall';
 import Modal from '../../components/Modal';
-import { useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import Button from '../../components/Button';
 import { format } from 'date-fns';
+import { api } from '../../api/axios';
+import { Phone, User } from '@phosphor-icons/react';
 
 interface EventProp {
-  id: string
+  id: number
   title: string
-  desc: string
-  start: Date
-  end: Date
+  description: string
+  start: string
+  end: string
+  user: {
+    name: string
+    phone: number
+  }
 }
 
 export default function Schedule() {
 
   const [ openNewEvent, setOpenNewEvent ] = useState(false)
   const [ openEvent, setOpenEvent ] = useState(false)
-  const [ event, setEvent ] = useState<EventProp>({})
+  const [ events, setEvents ] = useState<EventProp[]>([])
+  const [ event, setEvent ] = useState<EventProp>({} as any)
   const [ title, setTitle ] = useState('')
-  const [ desc, setDesc ] = useState('')
+  const [ description, setDescription ] = useState('')
   const [ date, setDate ] = useState('')
+
+  useEffect(() => {
+    getEvent()
+  }, [])
+
+  async function getEvent() {
+    await api.get("/schedules/")
+      .then(x => setEvents(x.data))
+      .catch(x => alert(x))
+  }
 
   function handleToogleNewEvent() {
     setOpenNewEvent(!openNewEvent)
   }
 
-  function handleNewEvent() {
+  async function handleNewEvent(event: FormEvent) {
+    event.preventDefault()
+    await api.post("/schedules/create", {
+      title,
+      description,
+      start: date,
+      end: date
+    })
+      .then(() => getEvent())
+      .catch(x => alert(x)).then(x => console.log(x))
     setOpenNewEvent(!openNewEvent)
   }
 
@@ -46,7 +72,7 @@ export default function Schedule() {
 
   return (
     <>
-      <Header isLogged />
+      <Header />
       <div id={style.Schedule}>
         <div className="container">
           <div className={style.content}>
@@ -66,11 +92,11 @@ export default function Schedule() {
                   </div>
                   <div className={style.modalBox}>
                     <label htmlFor="date">Data</label>
-                    <input type='datetime-local' required id="date" onChange={(e) => setDesc(e.target.value)} value={desc} placeholder='Descrição do Evento ou Reunião' />
+                    <input type='datetime-local' required id="date" onChange={(e) => setDate(e.target.value)} value={date} placeholder='Descrição do Evento ou Reunião' />
                   </div>
                   <div className={style.modalBox}>
                     <label htmlFor="desc">Descrição <span>(max 240 caracteres)</span></label>
-                    <textarea required id="desc" maxLength={240} onChange={(e) => setDate(e.target.value)} value={date} placeholder='Descrição do Evento ou Reunião' />
+                    <textarea required id="desc" maxLength={240} onChange={(e) => setDescription(e.target.value)} value={description} placeholder='Descrição do Evento ou Reunião' />
                   </div>
                   <div className={style.modalBox}>
                     <Button type='submit' text='Agendar Evento' />
@@ -80,29 +106,7 @@ export default function Schedule() {
             </div>
             <Calendar
               localizer={momentLocalizer(moment)}
-              events={[
-                {
-                  id: '1',
-                  title: 'Evento',
-                  desc: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of ype and scrambled it to make a typesssssssssss',
-                  start: new Date("2024-03-19T03:24:00"),
-                  end: new Date("2024-03-19T19:24:00"),
-                },
-                {
-                  id: '2',
-                  title: 'Diversos',
-                  desc: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of ype and scrambled it to make a typesssssssssss',
-                  start: new Date("2024-03-19T03:24:00"),
-                  end: new Date("2024-03-19T03:24:00"),
-                },
-                {
-                  id: '3',
-                  title: 'Reunião',
-                  desc: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of ype and scrambled it to make a typesssssssssss',
-                  start: new Date("2024-03-16T03:24:00"),
-                  end: new Date("2024-03-16T03:24:00"),
-                },
-              ]}
+              events={events}
               startAccessor="start"
               views={['month']}
               onSelectEvent={handleEvent}
@@ -118,12 +122,22 @@ export default function Schedule() {
             <Modal onClick={handleToogleEvent} isOpen={openEvent} title={event.title}>
               <div className={style.modalForm}>
                 <div className={style.modalBox}>
+                  <strong>Morador</strong>
+                  <div className={style.user}>
+                    <User />
+                    <div className={style.info}>
+                      <span className={style.name}>{event?.user?.name}</span>
+                      <span className={style.phone}><Phone/>{event?.user?.phone}</span>
+                    </div>
+                  </div>
+                </div>
+                <div className={style.modalBox}>
                   <strong>Informações</strong>
-                  <p>{event.desc}</p>
+                  <p>{event.description}</p>
                 </div>
                 <div className={style.modalBox}>
                   <strong>Data e Horário</strong>
-                  <p>{format(new Date("2024-03-16T23:24:00"), "dd 'de' MMMM 'de' yyyy',' 'às' HH 'horas e' mm 'minutos'", { locale: ptBR })}</p>
+                  <time>{format(new Date(event?.start || new Date()), "dd 'de' MMMM 'de' yyyy',' 'às' HH 'horas e' mm 'minutos'", { locale: ptBR })}</time>
                 </div>
                 <div className={style.modalBox}>
                   <Button isPrimary={false} type='button' onClick={handleToogleEvent} text='Fechar' />

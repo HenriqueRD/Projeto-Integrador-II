@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,8 +19,11 @@ import com.dordox.dordox.Dto.UserDto;
 import com.dordox.dordox.Entities.UserEntity;
 import com.dordox.dordox.Services.UserService;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/users")
+@CrossOrigin("http://localhost:5173/")
 public class UserController {
 	
 	@Autowired
@@ -52,7 +56,17 @@ public class UserController {
 			String token = serv.auth(obj);
 			return new ResponseEntity<>(token, HttpStatus.OK);
 		} catch (Exception e) {
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(e.getMessage() + 111, HttpStatus.UNAUTHORIZED);
+		}		
+	}
+
+	@GetMapping("/auth/me")
+	public ResponseEntity<Object> me(HttpServletRequest req) throws Exception {
+		try {
+			UserDto user = new UserDto(serv.me(Long.parseLong(req.getAttribute("user_id").toString())));
+			return new ResponseEntity<>(user, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage() + 111, HttpStatus.UNAUTHORIZED);
 		}		
 		
 	}

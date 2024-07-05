@@ -1,25 +1,24 @@
-import { User } from '@phosphor-icons/react'
+import { Chats, User } from '@phosphor-icons/react'
 import { format, formatDistance, subDays } from 'date-fns'
 import style from './style.module.scss'
 import { ptBR } from 'date-fns/locale'
 import { Link } from 'react-router-dom'
 
 interface CardTopicProps {
+  comments: number
   data: {
-    id: string
+    id: number
     user: {
-      id: string
       name: string
     }
     category: string
     title: string
-    desc: string
-    createAt: string
+    description: string
+    createdAt: string
   }
 }
 
-export default function CardTopic({data} : CardTopicProps) {
-   
+export default function CardTopic({data, comments} : CardTopicProps) {
   return (
     <div id={style.CardTopic}>
       <div className={style.header}>
@@ -30,14 +29,20 @@ export default function CardTopic({data} : CardTopicProps) {
             <span className={style.cat}>{data.category}</span>
           </div>
         </div>
-        <time title={format(new Date(data.createAt), 'dd/MM/yyyy')} dateTime={format(new Date(data.createAt), 'dd/MM/yyyy')}>{formatDistance(subDays(new Date(data.createAt), 0), new Date(), {addSuffix: true, locale: ptBR})}</time>
+        <time title={format(new Date(data.createdAt), 'dd/MM/yyyy')} dateTime={format(new Date(data.createdAt), 'dd/MM/yyyy')}>{formatDistance(subDays(new Date(data.createdAt), 0), new Date(), {addSuffix: true, locale: ptBR})}</time>
       </div>
       <div className={style.text}>
         <p className={style.title}>{data.title}</p>
-        <p>{data.desc}</p>
+        <p>{data.description}</p>
       </div>
-      <div className={style.button}>
-        <Link to={`/forum/${data.id}`}>Visualizar</Link>
+      <div className={style.footer}>
+        <div className={style.button}>
+          <Link to={`/forum/${data.id}`}>Visualizar</Link>
+        </div>
+        <div className={style.comments}>
+          <Chats size={22} />
+          <span>{comments}</span>
+        </div>
       </div>
     </div>
   )

@@ -26,8 +26,13 @@ public class TopicService {
 	}
 	
 	public TopicEntity find(Long id) throws TopicNotFoundException {
-		TopicEntity topic = repo.findById(id).orElseThrow(() -> new TopicNotFoundException("Tópico não existe!"));
-		return topic;
+		TopicEntity topics = repo.findById(id).orElseThrow(() -> new TopicNotFoundException("Tópico não existe!"));
+		return topics;
+	}
+
+	public List<TopicEntity> findByCategory(String category) {
+		List<TopicEntity> topics = repo.findByCategoryContainingIgnoreCase(category);
+		return topics;
 	}
 	
 	@Transactional

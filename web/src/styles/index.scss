@@ -17,13 +17,13 @@ input,
 button,
 textarea, a, select, label  {
   font: 400 1rem "Inter";
-  transition: 200ms;
 }
 a {
   text-decoration: none;
 }
-input, select {
+input, select, button, a {
   outline: 0;
+  transition: 200ms;
   border: none;
 }
 button {

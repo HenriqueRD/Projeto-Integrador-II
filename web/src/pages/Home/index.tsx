@@ -2,12 +2,16 @@ import Header from '../../components/Header'
 import './style.scss'
 import banner from '../../../src/assest/banner.png'
 import Logo from '../../components/Logo'
+import { useContext } from 'react'
+import { AuthContext } from '../../contexts/AuthContext'
 
 export default function Home() {
-   
+  
+  const { user, isAuthenticated } = useContext(AuthContext)
+
   return (
     <>
-      <Header isLogged />
+      <Header />
       <div id='Home'>
         <div className="container">
           <div className="content">

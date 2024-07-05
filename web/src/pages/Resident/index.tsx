@@ -1,69 +1,59 @@
-import { useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import ButtonSmall from '../../components/ButtonSmall'
 import CardResident from '../../components/CardResident'
 import Header from '../../components/Header'
 import style from './style.module.scss'
+import { api } from '../../api/axios'
 
-const data = [
-  {
-    id: 1,
-    name: 'Henrique R Dullius',
-    phone: 51998960698,
-    email: 'Henrique@gmail.com',
-    createdAt: new Date()
-  },
-  {
-    id: 2,
-    name: 'Haidi Maria Santos',
-    phone: 51992329965,
-    email: 'haidimaria@gmail.com',
-    createdAt: new Date()
-  },
-  {
-    id: 3,
-    name: 'Paulo Celson Pikasso',
-    phone: 51998832961,
-    email: 'pikassocelson@gmail.com',
-    createdAt: new Date()
-  },
-  {
-    id: 3,
-    name: 'Paulo Celson Pikasso',
-    phone: 51998832961,
-    email: 'pikassocelson@gmail.com',
-    createdAt: new Date()
-  },
-  {
-    id: 3,
-    name: 'Paulo Celson Pikasso',
-    phone: 51998832961,
-    email: 'pikassocelson@gmail.com',
-    createdAt: new Date()
-  }
-]
+type ResidentProps = {
+  id: number
+  name: string
+  phone: number
+  email: string
+  createdAt: Date
+}
+
 export default function Resident() {
 
-  const [ resident, setResident ] = useState(data)
-  
+  const [ residents, setResidents ] = useState<ResidentProps[]>([])
+  const [ name, setName ] = useState("")
+
+  useEffect(() => {
+    getResidents()
+  }, [])
+
+  async function getResidents() {
+    await api.get("/users/").then(x => setResidents(x.data))
+  }
+
+  async function handleFilter(event: FormEvent) {
+    event.preventDefault()
+    if (name === "") {
+      getResidents()
+      return
+    }
+    await api.get("/users/find", { params: { value: name } }).then(x => setResidents(x.data))
+  }
+
   return (
     <>
-      <Header isLogged />
+      <Header />
       <div id={style.Resident}>
         <div className="container">
           <div className={style.content}>
             <div className={style.header}>
               <div>
-                <h3>Moradores: {resident.length}</h3>
+                <h3>Moradores: {residents.length}</h3>
                 <p>Procure por algum morador específico pelo nome</p>
               </div>
-              <form>
-                <input required type="text" placeholder='Buscar por nome' />
+              <form onSubmit={handleFilter}>
+                <input type="text" value={name} onChange={x => setName(x.target.value)} placeholder='Buscar por nome' />
                 <ButtonSmall type='submit' text='Procurar' />
               </form>
             </div>
             <div className={style.list}>
               {
-                resident.map(x => {return (
+                residents.map(x => { return (
                   <CardResident key={x.id} data={x} />
                 )})
               }

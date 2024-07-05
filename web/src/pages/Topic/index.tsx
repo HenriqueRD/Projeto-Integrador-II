@@ -1,14 +1,83 @@
-import { User } from '@phosphor-icons/react'
+import { Chats, User } from '@phosphor-icons/react'
 import Header from '../../components/Header'
 import style from './style.module.scss'
 import ButtonSmall from '../../components/ButtonSmall'
 import CardComment from '../../components/CardComment'
+import { FormEvent, useEffect, useState } from 'react'
+import { api } from '../../api/axios'
+import { format, formatDistance, subDays } from 'date-fns'
+import { ptBR } from 'date-fns/locale/pt-BR'
+import { useParams } from 'react-router-dom'
+import toast from 'react-hot-toast'
+
+type CommentProps = {
+  id: number
+  user: {
+    name: string
+  }
+  description: string
+  createdAt: string
+}
+
+type TopicProps = {
+  id: number
+  user: {
+    name: string
+  }
+  category: string
+  title: string
+  description: string
+  createdAt: string
+  comments: CommentProps[]
+}
 
 export default function Topic() {
 
+  const [ update, setUpdate ] = useState(false)
+  const [ description, setDescription ] = useState("")
+  const { id } = useParams()
+  const [ topic, setTopic ] = useState<TopicProps>({} as any)
+
+  async function getTopic() {
+    await api.get(`/topics/${id}`).then(x => setTopic(x.data))
+  }
+
+  useEffect(() => {
+    getTopic()
+  }, [id, update])
+
+
+  if (!topic || !topic.user || !topic.comments) { 
+    return; 
+  }
+
+  async function handleNewComment(event: FormEvent) {
+    event.preventDefault()
+    await api.post("/comments/", { description, topicId: id })
+      .then(() => { 
+        setUpdate(!update)
+        toast.success("comentário Criado!", {
+          style: {
+            borderRadius: '6px',
+            background: '#323238',
+            color: '#E1E1E6',
+          },
+        })
+      })
+      .catch(x => 
+        toast.error("Erro: " + x.response.data, {
+          style: {
+            borderRadius: '6px',
+            background: '#323238',
+            color: '#E1E1E6',
+          },
+        })
+      )
+  }
+
   return (
     <>
-      <Header isLogged />
+      <Header />
       <div id={style.Topic}>
         <div className="container">
           <div className={style.content}>
@@ -17,21 +86,26 @@ export default function Topic() {
                 <div className={style.user}>
                   <User />
                   <div className={style.info}>
-                    <span className={style.name}>Henrique R Dullius</span>
-                    <span className={style.cat}>DIVERSOS</span>
+                    <span className={style.name}>{topic.user.name}</span>
+                    <span className={style.cat}>{topic.category}</span>
                   </div>
                 </div>
-                <time>Públicado há 1h</time>
+                <time title={format(new Date(topic.createdAt), 'dd/MM/yyyy')} dateTime={format(new Date(topic.createdAt), 'dd/MM/yyyy')}>{formatDistance(subDays(new Date(topic?.createdAt), 0), new Date(), {addSuffix: true, locale: ptBR})}</time>
               </div>
               <div className={style.desc}>
-                <h2>Botão de pesquisa para encontrar</h2>
-                <p>A página do fórum pode ser proje naveguem pelos tópicos, façam perguntas, respondam a perguntas de outros morafdsdfsdores e participem de discussões. Aqui está um esboço básico da página do fórum:",
-                </p>
+                <h2>{topic.title}</h2>
+                <p>{topic.description}</p>
               </div>
               <div className={style.answer}>
-                <h3>Deixe seu comentário</h3>
-                <form>
-                  <textarea maxLength={350} placeholder='Escreva um comentário...' />
+                <div className={style.commentInfo}>
+                  <h3>Deixe seu comentário</h3>
+                  <div className={style.length}>
+                    <Chats size={22} />
+                    <span>{topic.comments.length}</span>
+                  </div>
+                </div>
+                <form onSubmit={handleNewComment}>
+                  <textarea maxLength={255} value={description} onChange={x => setDescription(x.target.value)} placeholder='Escreva um comentário...' />
                   <footer>
                     <ButtonSmall className={style.button} type='submit' text='Publicar' />
                   </footer>
@@ -39,8 +113,13 @@ export default function Topic() {
               </div>
             </div>
             <div className={style.comments}>
-              <CardComment createAt={Date()} name='Henrique R Dullius' desc='A página do fórum pode ser proje naveguem pelos tópicos, façam perguntas, respondam a perguntas de outros morafdsdfsdores e participem de discussões. Aqui está um esboço básico da página do fórum:",'/>
-              <CardComment createAt={Date()} name='Henrique R Dullius' desc='A página do fórum pode ser proje naveguem pelos tópicos, façam perguntas, respondam a perguntas de outros morafdsdfsdores e participem de discussões. Aqui está um esboço básico da página do fórum:",'/>
+              {
+                topic.comments.map(x => {
+                  return (
+                    <CardComment key={x.id} createAt={x.createdAt} name={x.user.name} desc={x.description}/>
+                  )
+                })
+              }
             </div>
           </div>
         </div>

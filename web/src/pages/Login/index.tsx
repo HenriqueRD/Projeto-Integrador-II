@@ -1,17 +1,19 @@
-import { FormEvent, useState } from 'react'
+import { FormEvent, useContext, useState } from 'react'
 import './style.scss'
 import Header from '../../components/Header'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import Button from '../../components/Button'
+import { AuthContext } from '../../contexts/AuthContext'
 
 export default function Login() {
   const [ email, setEmail ] = useState('') 
   const [ password, setPassword ] = useState('')
-  const navigate  = useNavigate()
 
-  function handleLogin(e : FormEvent) {
+  const auth = useContext(AuthContext)
+
+  async function handleLogin(e : FormEvent) {
     e.preventDefault()
-    navigate('home')
+    await auth.signIn({email, password})
   }
 
   return (
@@ -35,8 +37,8 @@ export default function Login() {
               <Link to='/'>Esqueci minha senha</Link>
             </div>
             <div className='box'>
-              <Button text='Entrar' />
-              <Link to='registrar'>Cadastre-se</Link>
+              <Button type='submit' text='Entrar' />
+              <Link to='/registrar'>Cadastre-se</Link>
             </div>
           </form>
         </div>
